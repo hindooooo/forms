@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نماذج مكتب السفر متعددة اللغات - Formulaires Agence de Voyage - Travel Agency Forms - Reisebüro Formulare</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #2c5aa0, #1e3c72);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .language-selector {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #2c5aa0;
+            border-color: white;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-title {
+            font-size: 2em;
+            color: #2c5aa0;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+            padding-left: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 40px auto 0;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            transform: scale(1.2);
+        }
+
+        .arabic {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .arabic input,
+        .arabic textarea,
+        .arabic select {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .language-buttons {
+                flex-direction: column;
+            }
+            
+            .lang-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌍 نماذج مكتب السفر 🌍</h1>
+            <div class="language-selector">
+                <h3>اختر اللغة - Choisir la langue - Choose Language - Sprache wählen</h3>
+                <div class="language-buttons">
+                    <button class="lang-btn active" onclick="switchLanguage('ar')">العربية</button>
+                    <button class="lang-btn" onclick="switchLanguage('fr')">Français</button>
+                    <button class="lang-btn" onclick="switchLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="switchLanguage('de')">Deutsch</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <!-- Arabic Form -->
+            <div id="form-ar" class="form-section active arabic">
+                <h2 class="form-title">نموذج حجز السفر</h2>
+                
+                <div class="section-title">معلومات شخصية</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="firstName-ar">الاسم الأول *</label>
+                        <input type="text" id="firstName-ar" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="lastName-ar">اسم العائلة *</label>
+                        <input type="text" id="lastName-ar" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="email-ar">البريد الإلكتروني *</label>
+                        <input type="email" id="email-ar" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="phone-ar">رقم الهاتف *</label>
+                        <input type="tel" id="phone-ar" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="nationality-ar">الجنسية</label>
+                        <select id="nationality-ar">
+                            <option value="">اختر الجنسية</option>
+                            <option value="DZ">الجزائرية</option>
+                            <option value="MA">المغربية</option>
+                            <option value="TN">التونسية</option>
+                            <option value="FR">الفرنسية</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                    </div>
+                    <div class="form-col">
+                        <label for="passportNo-ar">رقم جواز السفر</label>
+                        <input type="text" id="passportNo-ar">
+                    </div>
+                </div>
+
+                <div class="section-title">تفاصيل السفر</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="destination-ar">الوجهة *</label>
+                        <input type="text" id="destination-ar" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="travelType-ar">نوع السفر</label>
+                        <select id="travelType-ar">
+                            <option value="">اختر نوع السفر</option>
+                            <option value="business">عمل</option>
+                            <option value="leisure">سياحة</option>
+                            <option value="pilgrimage">حج/عمرة</option>
+                            <option value="family">زيارة عائلية</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="departureDate-ar">تاريخ المغادرة *</label>
+                        <input type="date" id="departureDate-ar" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="returnDate-ar">تاريخ العودة</label>
+                        <input type="date" id="returnDate-ar">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="passengers-ar">عدد المسافرين</label>
+                        <input type="number" id="passengers-ar" min="1" value="1">
+                    </div>
+                    <div class="form-col">
+                        <label for="class-ar">درجة السفر</label>
+                        <select id="class-ar">
+                            <option value="economy">اقتصادية</option>
+                            <option value="business">رجال أعمال</option>
+                            <option value="first">أولى</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">خدمات إضافية</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hotel-ar">
+                        <label for="hotel-ar">حجز فندق</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="transfer-ar">
+                        <label for="transfer-ar">نقل من المطار</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="insurance-ar">
+                        <label for="insurance-ar">تأمين السفر</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="visa-ar">
+                        <label for="visa-ar">مساعدة في الحصول على التأشيرة</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes-ar">ملاحظات إضافية</label>
+                    <textarea id="notes-ar" placeholder="أي طلبات أو ملاحظات خاصة..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" onclick="submitForm('ar')">إرسال الطلب</button>
+            </div>
+
+            <!-- French Form -->
+            <div id="form-fr" class="form-section">
+                <h2 class="form-title">Formulaire de Réservation de Voyage</h2>
+                
+                <div class="section-title">Informations Personnelles</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="firstName-fr">Prénom *</label>
+                        <input type="text" id="firstName-fr" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="lastName-fr">Nom de famille *</label>
+                        <input type="text" id="lastName-fr" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="email-fr">Email *</label>
+                        <input type="email" id="email-fr" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="phone-fr">Téléphone *</label>
+                        <input type="tel" id="phone-fr" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="nationality-fr">Nationalité</label>
+                        <select id="nationality-fr">
+                            <option value="">Choisir la nationalité</option>
+                            <option value="DZ">Algérienne</option>
+                            <option value="MA">Marocaine</option>
+                            <option value="TN">Tunisienne</option>
+                            <option value="FR">Française</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-col">
+                        <label for="passportNo-fr">Numéro de passeport</label>
+                        <input type="text" id="passportNo-fr">
+                    </div>
+                </div>
+
+                <div class="section-title">Détails du Voyage</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="destination-fr">Destination *</label>
+                        <input type="text" id="destination-fr" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="travelType-fr">Type de voyage</label>
+                        <select id="travelType-fr">
+                            <option value="">Choisir le type</option>
+                            <option value="business">Affaires</option>
+                            <option value="leisure">Tourisme</option>
+                            <option value="pilgrimage">Pèlerinage</option>
+                            <option value="family">Visite familiale</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="departureDate-fr">Date de départ *</label>
+                        <input type="date" id="departureDate-fr" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="returnDate-fr">Date de retour</label>
+                        <input type="date" id="returnDate-fr">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="passengers-fr">Nombre de voyageurs</label>
+                        <input type="number" id="passengers-fr" min="1" value="1">
+                    </div>
+                    <div class="form-col">
+                        <label for="class-fr">Classe de voyage</label>
+                        <select id="class-fr">
+                            <option value="economy">Économique</option>
+                            <option value="business">Affaires</option>
+                            <option value="first">Première</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Services Additionnels</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hotel-fr">
+                        <label for="hotel-fr">Réservation d'hôtel</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="transfer-fr">
+                        <label for="transfer-fr">Transfert aéroport</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="insurance-fr">
+                        <label for="insurance-fr">Assurance voyage</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="visa-fr">
+                        <label for="visa-fr">Assistance visa</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes-fr">Notes supplémentaires</label>
+                    <textarea id="notes-fr" placeholder="Demandes ou remarques particulières..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" onclick="submitForm('fr')">Envoyer la demande</button>
+            </div>
+
+            <!-- English Form -->
+            <div id="form-en" class="form-section">
+                <h2 class="form-title">Travel Booking Form</h2>
+                
+                <div class="section-title">Personal Information</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="firstName-en">First Name *</label>
+                        <input type="text" id="firstName-en" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="lastName-en">Last Name *</label>
+                        <input type="text" id="lastName-en" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="email-en">Email *</label>
+                        <input type="email" id="email-en" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="phone-en">Phone Number *</label>
+                        <input type="tel" id="phone-en" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="nationality-en">Nationality</label>
+                        <select id="nationality-en">
+                            <option value="">Select nationality</option>
+                            <option value="DZ">Algerian</option>
+                            <option value="MA">Moroccan</option>
+                            <option value="TN">Tunisian</option>
+                            <option value="FR">French</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-col">
+                        <label for="passportNo-en">Passport Number</label>
+                        <input type="text" id="passportNo-en">
+                    </div>
+                </div>
+
+                <div class="section-title">Travel Details</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="destination-en">Destination *</label>
+                        <input type="text" id="destination-en" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="travelType-en">Travel Type</label>
+                        <select id="travelType-en">
+                            <option value="">Select type</option>
+                            <option value="business">Business</option>
+                            <option value="leisure">Leisure</option>
+                            <option value="pilgrimage">Pilgrimage</option>
+                            <option value="family">Family Visit</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="departureDate-en">Departure Date *</label>
+                        <input type="date" id="departureDate-en" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="returnDate-en">Return Date</label>
+                        <input type="date" id="returnDate-en">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="passengers-en">Number of Passengers</label>
+                        <input type="number" id="passengers-en" min="1" value="1">
+                    </div>
+                    <div class="form-col">
+                        <label for="class-en">Travel Class</label>
+                        <select id="class-en">
+                            <option value="economy">Economy</option>
+                            <option value="business">Business</option>
+                            <option value="first">First Class</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Additional Services</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hotel-en">
+                        <label for="hotel-en">Hotel Booking</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="transfer-en">
+                        <label for="transfer-en">Airport Transfer</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="insurance-en">
+                        <label for="insurance-en">Travel Insurance</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="visa-en">
+                        <label for="visa-en">Visa Assistance</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes-en">Additional Notes</label>
+                    <textarea id="notes-en" placeholder="Any special requests or remarks..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" onclick="submitForm('en')">Submit Request</button>
+            </div>
+
+            <!-- German Form -->
+            <div id="form-de" class="form-section">
+                <h2 class="form-title">Reisebuchungsformular</h2>
+                
+                <div class="section-title">Persönliche Informationen</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="firstName-de">Vorname *</label>
+                        <input type="text" id="firstName-de" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="lastName-de">Nachname *</label>
+                        <input type="text" id="lastName-de" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="email-de">E-Mail *</label>
+                        <input type="email" id="email-de" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="phone-de">Telefonnummer *</label>
+                        <input type="tel" id="phone-de" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="nationality-de">Staatsangehörigkeit</label>
+                        <select id="nationality-de">
+                            <option value="">Staatsangehörigkeit wählen</option>
+                            <option value="DZ">Algerisch</option>
+                            <option value="DE">Deutsch</option>
+                            <option value="MA">Marokkanisch</option>
+                            <option value="TN">Tunesisch</option>
+                            <option value="FR">Französisch</option>
+                            <option value="other">Andere</option>
+                        </select>
+                    </div>
+                    <div class="form-col">
+                        <label for="passportNo-de">Reisepassnummer</label>
+                        <input type="text" id="passportNo-de">
+                    </div>
+                </div>
+
+                <div class="section-title">Reisedetails</div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="destination-de">Reiseziel *</label>
+                        <input type="text" id="destination-de" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="travelType-de">Reiseart</label>
+                        <select id="travelType-de">
+                            <option value="">Reiseart wählen</option>
+                            <option value="business">Geschäftsreise</option>
+                            <option value="leisure">Urlaub</option>
+                            <option value="pilgrimage">Pilgerfahrt</option>
+                            <option value="family">Familienbesuch</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="departureDate-de">Abreisedatum *</label>
+                        <input type="date" id="departureDate-de" required>
+                    </div>
+                    <div class="form-col">
+                        <label for="returnDate-de">Rückreisedatum</label>
+                        <input type="date" id="returnDate-de">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-col">
+                        <label for="passengers-de">Anzahl Reisende</label>
+                        <input type="number" id="passengers-de" min="1" value="1">
+                    </div>
+                    <div class="form-col">
+                        <label for="class-de">Reiseklasse</label>
+                        <select id="class-de">
+                            <option value="economy">Economy</option>
+                            <option value="business">Business</option>
+                            <option value="first">Erste Klasse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section-title">Zusätzliche Services</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hotel-de">
+                        <label for="hotel-de">Hotelbuchung</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="transfer-de">
+                        <label for="transfer-de">Flughafentransfer</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="insurance-de">
+                        <label for="insurance-de">Reiseversicherung</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="visa-de">
+                        <label for="visa-de">Visa-Unterstützung</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes-de">Zusätzliche Bemerkungen</label>
+                    <textarea id="notes-de" placeholder="Besondere Wünsche oder Anmerkungen..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" onclick="submitForm('de')">Anfrage senden</button>
+            </div>
+
+            <div id="success-message" class="success-message">
+                <div id="success-text-ar" class="arabic" style="display:none;">✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.</div>
+                <div id="success-text-fr" style="display:none;">✅ Votre demande a été envoyée avec succès ! Nous vous contactons bientôt.</div>
+                <div id="success-text-en" style="display:none;">✅ Your request has been submitted successfully! We will contact you soon.</div>
+                <div id="success-text-de" style="display:none;">✅ Ihre Anfrage wurde erfolgreich gesendet! Wir kontaktieren Sie bald.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'ar';
+
+        function switchLanguage(lang) {
+            // Hide all forms
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected form
+            document.getElementById('form-' + lang).classList.add('active');
+            
+            // Update button states
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update document direction for Arabic
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+            
+            currentLanguage = lang;
+        }
+
+        function submitForm(lang) {
+            // Simple form validation
+            const form = document.getElementById('form-' + lang);
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.style.borderColor = '#ff4444';
+                    isValid = false;
+                } else {
+                    field.style.borderColor = '#e0e0e0';
+                }
+            });
+
+            if (isValid) {
+                // Show success message
+                document.getElementById('success-message').style.display = 'block';
+                document.querySelectorAll('[id^="success-text-"]').forEach(msg => {
+                    msg.style.display = 'none';
+                });
+                document.getElementById('success-text-' + lang).style.display = 'block';
+                
+                // Scroll to success message
+                document.getElementById('success-message').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    form.reset();
+                    document.getElementById('success-message').style.display = 'none';
+                }, 3000);
+            } else {
+                // Show error message based on language
+                let errorMessage;
+                switch(lang) {
+                    case 'ar':
+                        errorMessage = 'يرجى ملء جميع الحقول المطلوبة';
+                        break;
+                    case 'fr':
+                        errorMessage = 'Veuillez remplir tous les champs obligatoires';
+                        break;
+                    case 'en':
+                        errorMessage = 'Please fill in all required fields';
+                        break;
+                    case 'de':
+                        errorMessage = 'Bitte füllen Sie alle Pflichtfelder aus';
+                        break;
+                }
+                alert(errorMessage);
+            }
+        }
+
+        // Initialize with today's date for date fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (input.id.includes('departure')) {
+                    input.min = today;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
